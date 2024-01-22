@@ -7,7 +7,7 @@ directorylist=dir(data_directory);
 %Go through each folder with data and store it somewhere
 for datadir_i=directorylist'
 cd(data_directory);
-    if contains(datadir_i.name,'.') % Avoid filenames containing '.'
+    if contains(datadir_i.name,'.') % Avoid things that aren't folders
         continue;
     end
     cd(datadir_i.name)
@@ -33,6 +33,7 @@ function collect_data(dataset_name,target_path)
     if isfile("Gravity.csv")
         grav_data=readmatrix("Gravity.csv");
     end
+    % TBC: Add remaining files if exist
     cd(target_path)
     save(dataset_name)
     cd(start_path);
