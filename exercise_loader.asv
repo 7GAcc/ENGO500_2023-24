@@ -1,0 +1,73 @@
+function exerciseData = exercise_loader(exercise)
+%This function serves to load all of the data of a speciifed exercise type
+
+% Define the main directory where all the subdirectories are located
+mainDir = 'Figures';
+
+% Get a list of all directories in the main directory
+directories = dir(mainDir);
+directories = directories([directories.isdir]); % Keep only directories, excluding '.' and '..'
+
+% Initialize a cell array to store loaded data
+exerciseData = cell(1, numel(directories));
+combinedTable = table();
+
+% Loop through each directory
+for i = 1:numel(directories)
+    % Get the current directory name
+    currentDir = directories(i).name;
+    
+    % Skip '.' and '..'
+    if strcmp(currentDir, '.') || strcmp(currentDir, '..')
+        continue;
+    end
+    
+    % Construct the full path to the exercise directory
+    exerciseDir = fullfile(mainDir, currentDir, exercise);
+
+    
+    % Check if the exercise directory exists
+    if exist(exerciseDir, 'dir')
+        data_dir = dir(exerciseDir);
+        data_dir = data_dir([data_dir.isdir])
+
+        for i = length(data_dir)
+                % Skip '.' and '..'
+            if strcmp(data_dir(i).name, '.') || strcmp(data_dir(i).name, '..')
+                continue;
+            end
+
+            finalDir = data_dir.folder+'/';
+             % Get a list of all .mat files in the exercise directory
+            matFiles = dir(fullfile(finalDir, '*.mat'));
+            
+            
+               % Loop through each .mat file
+            for j = 1:numel(matFiles)
+                % Load the data from the current .mat file
+                data = load(fullfile(exerciseDir, matFiles(j).name));
+                
+                % Extract the table from the loaded data
+                currentTable = data.Stat_analysis;
+                
+                % Add a column indicating the source directory
+                currentTable.Directory = repmat({currentDir}, height(currentTable), 1);
+                
+                % Concatenate the current table with the combined table
+                combinedTable = [combinedTable; currentTable];
+            end
+        end
+    
+    
+
+       
+    else
+        fprintf('Exercise directory not found in %s\n', currentDir);
+    end
+end
+
+
+% Now exerciseData contains the loaded data from each directory
+exerciseData = combinedTable;
+end
+

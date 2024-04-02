@@ -1,5 +1,7 @@
 function [start_time, end_time] = time_range_finder(data)
-    
+    % This function takes an input data and and returns the start time in
+    % seconds and end time in seconds
+
     delta_accel = diff(data);
     accelNorm = vecnorm(data(:,3:end),2,2);
     delta_norm = diff(accelNorm);
