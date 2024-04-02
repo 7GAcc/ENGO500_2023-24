@@ -5,10 +5,10 @@ close; clear all; clc;
 % adding all subfolders to our path so we can load files easier
 folder = fileparts(which(mfilename)); 
 addpath(genpath(folder));
-
-[files.name,files.folder] = uigetfile('Data/*.mat');
-%files = dir('Data/*.mat');
-
+ 
+%[files.name,files.folder] = uigetfile('Data/*.mat');
+%files = dir('Processed Data/*.mat');
+files = dir('Data/*.mat');
 
 emptyStruct = struct;
 % This loop simply iterates through each file in our walking data file
@@ -31,7 +31,7 @@ for file = files'
 
 
     %removing non sensor fields
-    fields = setdiff(fields,{'dataset_name','start_path','target_path','steps'});
+    fields = {'accel_data','bar_data','gyro_data','grav_data','orient_data'};
 
     [name, exercise, rep] = extract_exercise(file.name);
     if steps~=0
@@ -57,6 +57,7 @@ for file = files'
 
        % initializing a place to save the data too
         save(figurepath+"/Repcount_Stats","-struct","emptyStruct")
+        writetable(table(),figurepath+"/Repcount_stats.csv")
 
         
         Stat_analysis = [];
@@ -107,7 +108,7 @@ for file = files'
     
 
         close(rpt)
-        rptview(rpt)
+
     else
         continue
     end
