@@ -6,7 +6,7 @@ function h = step_analysis_plotter(steps,sensor_data,sensor,name)
     
     Title = name +sensor;
     set(0, 'CurrentFigure', h(1));
-    clf reset;
+    clf(h);
     time = sensor_data(:,2);
 
     idx = round(size(sensor_data,1)/4);
