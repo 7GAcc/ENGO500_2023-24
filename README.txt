@@ -23,7 +23,6 @@ just parse an entire directory
 of the data within the Figures directory and compile data together based on exercise type from all individuals. It will then perform statistical analysis
 To see what methods, what sensors and what axis of those sensors had the lowest error in detecting steps/reps.
 
-
 Functions:
 
 - zero_cross_visualizer : This function serves as the primary analyis function for a specific sensor from an imu platform. It takes the data, as well as a known

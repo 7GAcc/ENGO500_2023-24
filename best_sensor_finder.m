@@ -1,4 +1,4 @@
-function best_2_sensorMethods = best_sensor_finder(exercise_data)
+function [best_2_sensorMethods, method]= best_sensor_finder(exercise_data)
 % This function finds the sensors that have the lowest error, and what
 % method was used to find that lowest error and returns there mean and
 % standard deviation in a table. 
@@ -17,7 +17,7 @@ function best_2_sensorMethods = best_sensor_finder(exercise_data)
 
 % group all of the exercise data together, by sensor and axis and compute
 % there average for the 4 different methods
-
+methods = {"findpeaks","findpeaks_above_zero","double_findpeaks","zero_cross"};
 avgErrorSensor = grpstats(exercise_data,["Sensor","Axis"], {'mean'},'DataVars',["findpeaks","findpeaks_above_zero","double_findpeaks","zero_cross"]);
 
 % Convert the error values of the methods to an array, find there absolute
@@ -48,8 +48,7 @@ index = find(contains(exercise_data.Sensor,sensor));
 
 exercise_data_sensor_method = exercise_data(index,[1,method_idx,6]);
 
-best_2_sensorMethods = grpstats(exercise_data_sensor_method,["Sensor","Axis"],{'mean','std'});
-
+method = methods{method_idx-1};
+best_2_sensorMethods = grpstats(exercise_data_sensor_method,["Sensor","Axis"],{'mean','std'}) ;
 end
-
 
