@@ -18,6 +18,8 @@ addpath(genpath(folder));
 % Getting all of the exercise names (Zian has the most currently)
 exercise_names = dir("Figures/Zian/*");
 
+
+
 for ex = 1:length(exercise_names)
     
     if or(exercise_names(ex).name == '.', exercise_names(ex).name == "..")
@@ -27,16 +29,31 @@ for ex = 1:length(exercise_names)
     
     exercise_data = exercise_loader(name);
     bestSensorMethods = best_sensor_finder(exercise_data);
-    bestSensorMethods(:,[4,5]) = abs    (bestSensorMethods(:,[4,5])
-    bestSensorMethods = sortrows(bestSensorMethods,[4,5])
+    bestSensorMethods(:,[4,5]) = abs(bestSensorMethods(:,[4,5]));
+    bestSensorMethods = sortrows(bestSensorMethods,[4,5]);
 
     % Find the two lowest sensors
     bestAxis =grpstats(exercise_data,["Sensor","Axis"],{'mean','std'},'DataVars',["findpeaks","findpeaks_above_zero","double_findpeaks","zero_cross"]);
     
 
     avgErrorBySensorAxis = grpstats(exercise_data, 'Axis', {'mean','std'}, 'DataVars', ["findpeaks","findpeaks_above_zero","double_findpeaks","zero_cross"]);
+    exercise_imu
+    best_sensors = unique(bestSensorMethods.Sensor,'stable'); 
+    best_axis = [];
     
+    for i = 1:length(best_sensors)    
+        ascending_axis = (bestSensorMethods(bestSensorMethods.Sensor == string(best_sensors{i}),2));
+        best_axis = [best_axis, (table2cell(ascending_axis(1,1)))];
 
+    end
+
+    bestSensorMethods(bestSensorMethods.Sensor == "grav_data",:)
+
+    if ~exist("Exercise_imu_Specification.csv","file")
+        writetable(bestSensorMethods,"Exercise_imu_Specification.csv",'WriteMode','Append','WriteVariableNames',true,'WriteRowNames',true);
+    else
+        writetable(bestSensorMethods,"Exercise_imu_Specification.csv",'WriteMode','Append','WriteVariableNames',false,'WriteRowNames',true);
+    end
 
     ch = Chapter;
     ch.Title = name;
@@ -50,15 +67,15 @@ for ex = 1:length(exercise_names)
     add(sec1,tbl)
     
     
-    % Add section for SensorAxis with lowest average error
-    axisSection = Section;
-    axisSection.Title = 'Average Error Axis of Sensor';
-
-
-    
-    axisTable = Table(bestAxis);
-    add(axisSection, axisTable);
-    add(sec1,axisSection)
+   % Add section for SensorAxis with lowest average error
+   %axisSection = Section;
+   %axisSection.Title = 'Average Error Axis of Sensor';
+%
+%
+   %
+   %axisTable = Table(bestAxis);
+   %add(axisSection, axisTable);
+   %add(sec1,axisSection)
     add(ch,sec1)
     
     % Add sections to the report

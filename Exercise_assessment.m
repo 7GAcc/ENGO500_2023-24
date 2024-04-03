@@ -18,6 +18,8 @@ addpath(genpath(folder));
 % Getting all of the exercise names (Zian has the most currently)
 exercise_names = dir("Figures/Zian/*");
 
+
+
 for ex = 1:length(exercise_names)
     
     if or(exercise_names(ex).name == '.', exercise_names(ex).name == "..")
@@ -26,7 +28,7 @@ for ex = 1:length(exercise_names)
     name = (exercise_names(ex).name);
     
     exercise_data = exercise_loader(name);
-    bestSensorMethods = best_sensor_finder(exercise_data);
+    [bestSensorMethods,method] = best_sensor_finder(exercise_data);
     bestSensorMethods(:,[4,5]) = abs(bestSensorMethods(:,[4,5]));
     bestSensorMethods = sortrows(bestSensorMethods,[4,5]);
 
@@ -36,6 +38,18 @@ for ex = 1:length(exercise_names)
 
     avgErrorBySensorAxis = grpstats(exercise_data, 'Axis', {'mean','std'}, 'DataVars', ["findpeaks","findpeaks_above_zero","double_findpeaks","zero_cross"]);
     
+    best_sensors = unique(bestSensorMethods.Sensor,'stable');
+    best_axis = [];
+    
+    for i = 1:length(best_sensors)    
+        ascending_axis = (bestSensorMethods(bestSensorMethods.Sensor == string(best_sensors{i}),2));
+        best_axis = [best_axis, (table2cell(ascending_axis(1,1)))];
+
+    end
+
+    exercise_imu_specifications.(exercise_names(ex).name).best_sensors = best_sensors;
+    exercise_imu_specifications.(exercise_names(ex).name).best_axis = best_axis;
+    exercise_imu_specifications.(exercise_names(ex).name).method = method;
 
 
     ch = Chapter;
@@ -50,15 +64,15 @@ for ex = 1:length(exercise_names)
     add(sec1,tbl)
     
     
-    % Add section for SensorAxis with lowest average error
-    axisSection = Section;
-    axisSection.Title = 'Average Error Axis of Sensor';
-
-
-    
-    axisTable = Table(bestAxis);
-    add(axisSection, axisTable);
-    add(sec1,axisSection)
+   % Add section for SensorAxis with lowest average error
+   %axisSection = Section;
+   %axisSection.Title = 'Average Error Axis of Sensor';
+%
+%
+   %
+   %axisTable = Table(bestAxis);
+   %add(axisSection, axisTable);
+   %add(sec1,axisSection)
     add(ch,sec1)
     
     % Add sections to the report
@@ -67,6 +81,7 @@ for ex = 1:length(exercise_names)
 
 end
 
+save('exercise_imu_settings.mat',"exercise_imu_specifications",'-mat')
 rptview(report)
 % Save report as PDF
 
