@@ -4,8 +4,10 @@ clear all; clc;
 buffer_size=50*3;%50Hz Updates, 1.5 second buffer
 buffer_size=999999;%Full dataset(no buffer)
 rolling_buffer=0;
-user_weight=70;%kg
-user_height=172;%cm
+user_weight=98;%kg
+user_height=196;%cm
+% user_weight=70;%kg
+% user_height=172;%cm
 %% Load Data
 testdata.classes=["Static";
     "Walking";
@@ -23,10 +25,10 @@ testdata.list=[
 % "Processed Data/Test Data/PROCESSED_S22_Muaz_PullupsUnA_9Reps_V-undefined-undefined-2024-03-21_19-55-13.mat"
 % "Processed Data/Test Data/PROCESSED_S22_Muaz_Pullups_15Reps_V-undefined-undefined-2024-03-21_19-59-43.mat"
 % "Processed Data/Test Data/PROCESSED_S22_Muaz_Situps_10Reps_V-undefined-undefined-2024-03-21_20-10-57.mat"
-"Processed Data/Test Data/PROCESSED_S22_Muaz_Walking_15Steps-undefined-undefined-2024-03-21_20-15-54.mat"
+% "Processed Data/Test Data/PROCESSED_S22_Muaz_Walking_15Steps-undefined-undefined-2024-03-21_20-15-54.mat"
 % "Processed Data/Test Data/PROCESSED_S22_Raya_BarbellSquats_OO_10Reps-undefined-undefined-2024-03-19_17-41-14.mat"
 % "Processed Data/Test Data/PROCESSED_S22_Raya_BenchPress_OO_10Reps_V-undefined-undefined-2024-03-19_17-13-05.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Raya_Jogging_OO_300Steps-undefined-undefined-2024-03-19_16-49-43.mat"
+"Processed Data/Test Data/PROCESSED_S22_Raya_Jogging_OO_300Steps-undefined-undefined-2024-03-19_16-49-43.mat"
 % "Processed Data/Test Data/PROCESSED_S22_Raya_Pullups_OO_7Reps-undefined-undefined-2024-03-19_17-32-35.mat"
 % "Processed Data/Test Data/PROCESSED_S22_Raya_Walking_OO_300Steps-undefined-undefined-2024-03-19_16-39-27.mat"
 % "Processed Data/Test Data/PROCESSED_S22_Selena_BarbellSquats_10Reps-undefined-undefined-2024-03-27_8-47-49.mat"
