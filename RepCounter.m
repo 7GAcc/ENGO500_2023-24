@@ -32,7 +32,7 @@ function repcount = RepCounter(test_data, exercise_name)
 
     % step from IMU motion, comparing to an existing applications pedometer
     % readouts
-    clc
+    % clc
 
     load("exercise_imu_settings.mat") % struct of what axis and sensors to look for 
     load("sensor_title_table.mat")
