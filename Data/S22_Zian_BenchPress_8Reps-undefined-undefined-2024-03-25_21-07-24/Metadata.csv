@@ -1,0 +1,2 @@
+version,device name,recording epoch time,recording time,recording timezone,platform,appVersion,device id,sensors,sampleRateMs,standardisation
+3,SM-S901W,1711422444922,2024-03-25_03-07-24,America/Edmonton,android,1.31.0,95c8515f-4d25-4ab3-bcf7-b13f48868d5e,Accelerometer|Gravity|Gyroscope|Orientation|Barometer|Location|Pedometer|Annotation|TotalAcceleration|GyroscopeUncalibrated|AccelerometerUncalibrated,10|10|10|10|0|0|10||10|10|10,false
