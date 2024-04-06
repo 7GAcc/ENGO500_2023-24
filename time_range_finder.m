@@ -16,15 +16,17 @@ function [start_time, end_time] = time_range_finder(data)
             timer=0;
         end
 
-        if timer>.5
+        if timer>2
             start_time = [start_time;timer,data(i,2)];
             continue
         end  
     end
     if isempty(start_time)
-        start_time = 0;
+        start_time = data(1,2);
     else
         idx = find(max(start_time(:,1)));
+        
+
         start_time = start_time(idx,2);
     end
     % start from the end of the data to find the stop point, to avoid
@@ -37,7 +39,7 @@ function [start_time, end_time] = time_range_finder(data)
             timer=0;
         end
 
-        if timer>.5
+        if timer>2
             end_time = [end_time;timer,data(i,2)];
             continue
         end  

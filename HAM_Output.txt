@@ -1,0 +1,6 @@
+Summary of Activity: 
+Filename: Processed Data/Test Data/PROCESSED_S22_Gaurav_BenchPress_11Reps-undefined-undefined-2024-03-26_20-46-30.mat
+Predicted Exercise: BenchPress
+Confidence: 100
+Number of Steps/Reps Detected: 20.2
+Estimated Calories Burned: 248.1

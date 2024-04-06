@@ -27,7 +27,7 @@ for i = 1:numel(directories)
     currentDir = directories(i).name;
     
     % Skip '.' and '..'
-    if strcmp(currentDir, '.') || strcmp(currentDir, '..')
+    if strcmp(currentDir, '.') || strcmp(currentDir, '..') ||  strcmp(currentDir, 'unviable walking data')
         continue;
     end
     

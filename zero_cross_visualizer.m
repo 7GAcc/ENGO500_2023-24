@@ -70,6 +70,7 @@ function [difference,rpt] = zero_cross_visualizer(test_data,sensor,steps,stepcou
     % Create a buffer range for the zero crossing method from the standard
     % deviation of the data, this helps remove any noise that can exist
     % around the 0 axis and cause false flags
+    test_data.(sensor) = rmmissing(test_data.(sensor));
     zero_crossing_buffer = std(test_data.(sensor));
 
     % Downsample the data to 1/3d its original size. Tests show that we

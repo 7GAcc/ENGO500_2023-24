@@ -26,9 +26,10 @@ for ex = 1:length(exercise_names)
         continue
     end
     name = (exercise_names(ex).name);
-    
+    %name = 'walking'
     exercise_data = exercise_loader(name);
     [bestSensorMethods,method] = best_sensor_finder(exercise_data);
+
     bestSensorMethods(:,[4,5]) = abs(bestSensorMethods(:,[4,5]));
     bestSensorMethods = sortrows(bestSensorMethods,[4,5]);
 
@@ -47,8 +48,8 @@ for ex = 1:length(exercise_names)
 
     end
 
-    exercise_imu_specifications.(exercise_names(ex).name).best_sensors = best_sensors;
-    exercise_imu_specifications.(exercise_names(ex).name).best_axis = best_axis;
+    exercise_imu_specifications.(exercise_names(ex).name).best_sensors = best_sensors(1);
+    exercise_imu_specifications.(exercise_names(ex).name).best_axis = best_axis(1);
     exercise_imu_specifications.(exercise_names(ex).name).method = method;
 
 

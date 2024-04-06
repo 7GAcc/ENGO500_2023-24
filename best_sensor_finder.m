@@ -14,6 +14,7 @@ function [best_2_sensorMethods, method]= best_sensor_finder(exercise_data)
 
 
 
+exercise_data = exercise_data(~strcmp(exercise_data.Sensor, 'bar_data'), :);
 
 % group all of the exercise data together, by sensor and axis and compute
 % there average for the 4 different methods

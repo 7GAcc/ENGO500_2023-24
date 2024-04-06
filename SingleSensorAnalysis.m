@@ -7,8 +7,8 @@ folder = fileparts(which(mfilename));
 addpath(genpath(folder));
  
 %[files.name,files.folder] = uigetfile('Data/*.mat');
-%files = dir('Processed Data/*.mat');
-files = dir('Data/*.mat');
+files = dir('Processed Data/*.mat');
+%files = dir('Data/*.mat');
 
 emptyStruct = struct;
 % This loop simply iterates through each file in our walking data file

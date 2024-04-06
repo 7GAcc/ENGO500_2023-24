@@ -1,0 +1,20 @@
+
+Axis,findpeaks,findpeaks_above_zero,double_findpeaks,zero_cross,Sensor
+Z,-324,-216,-74,-67.5,accel_data
+Y,-375,-263,-83,-48.5,accel_data
+X,-315,-191,-64,-40,accel_data
+Relative Altitude,-53,-32,-5,-13.5,bar_data
+Pressure,-83,-43,-9,-13.5,bar_data
+Z,-278,-195,-69,-42,gyro_data
+Y,-321,-197,-46,-47.5,gyro_data
+X,-250,-177,-62,-28,gyro_data
+Z,-94,-30,-4,4,grav_data
+Y,-101,-57,-11,15.5,grav_data
+X,-101,-66,-5,6,grav_data
+qz,-102,-84,-14,12.5,orient_data
+qy,-114,-95,-12,12,orient_data
+qx,-120,-85,-13,11,orient_data
+qw,-115,-67,-9,4,orient_data
+roll,-87,-34,-3,18.5,orient_data
+pitch,-101,-55,-4,14.5,orient_data
+yaw,-126,-115,-15,18,orient_data

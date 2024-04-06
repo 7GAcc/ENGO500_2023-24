@@ -1,4 +1,7 @@
 clear all; clc;
+% adding all subfolders to our path so we can load files easier
+folder = fileparts(which(mfilename)); 
+addpath(genpath(folder));
 %% Set parameters
 %Set window for number of sequences
 buffer_size=50*3;%50Hz Updates, 1.5 second buffer
@@ -28,7 +31,7 @@ testdata.list=[
 % "Processed Data/Test Data/PROCESSED_S22_Muaz_Walking_15Steps-undefined-undefined-2024-03-21_20-15-54.mat"
 % "Processed Data/Test Data/PROCESSED_S22_Raya_BarbellSquats_OO_10Reps-undefined-undefined-2024-03-19_17-41-14.mat"
 % "Processed Data/Test Data/PROCESSED_S22_Raya_BenchPress_OO_10Reps_V-undefined-undefined-2024-03-19_17-13-05.mat"
-"Processed Data/Test Data/PROCESSED_S22_Raya_Jogging_OO_300Steps-undefined-undefined-2024-03-19_16-49-43.mat"
+% "Processed Data/Test Data/PROCESSED_S22_Raya_Jogging_OO_300Steps-undefined-undefined-2024-03-19_16-49-43.mat"
 % "Processed Data/Test Data/PROCESSED_S22_Raya_Pullups_OO_7Reps-undefined-undefined-2024-03-19_17-32-35.mat"
 % "Processed Data/Test Data/PROCESSED_S22_Raya_Walking_OO_300Steps-undefined-undefined-2024-03-19_16-39-27.mat"
 % "Processed Data/Test Data/PROCESSED_S22_Selena_BarbellSquats_10Reps-undefined-undefined-2024-03-27_8-47-49.mat"
@@ -48,7 +51,7 @@ testdata.list=[
 NNs.versions=[
     % load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\PatternNet\PatternNet_version0_1.mat");
     % load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\PatternNet\PatternNet_version0_2_20Hidden.mat");
-    load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\PatternNet\PatternNet_version0_6_20Hidden_wbar.mat");
+    load("NN Directory/PatternNet/PatternNet_version0_6_20Hidden_wbar.mat");
     ];
 
 clearvars call_gyro_x_data call_gyro_y_data plotting t x;

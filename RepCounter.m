@@ -42,8 +42,6 @@ function repcount = RepCounter(test_data, exercise_name)
 
     method = exercise_imu_specifications.(exercise_name).method;
 
-
-
     load('sensor_title_table.mat') % table of sensor names and there associated axis
 
 
@@ -92,12 +90,13 @@ function repcount = RepCounter(test_data, exercise_name)
 
 
     % Find the start and end time indexes from the 5 second stop 
-    %[start_time,end_time] = time_range_finder(test_data.accel_data);
+    [start_time,end_time] = time_range_finder(test_data.accel_data);
 
     % find the index values of those start and stop times and extract them
     % from the calibrated data
-    % idx = find(calibrated_data(:,2)>start_time & calibrated_data(:,2)<end_time);
-    % calibrated_data = calibrated_data(idx,:);
+     idx = find(calibrated_data(:,2)>start_time & calibrated_data(:,2)<end_time);
+     
+     calibrated_data = calibrated_data(idx,:);
     
     % For visualization We can plot steps when they were recorded to data to
     % look for trends, I created a personalized plotting function for this
