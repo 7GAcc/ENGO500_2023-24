@@ -31,7 +31,7 @@ for ex = 1:length(exercise_names)
     [bestSensorMethods,method] = best_sensor_finder(exercise_data);
 
     bestSensorMethods(:,[4,5]) = abs(bestSensorMethods(:,[4,5]));
-    bestSensorMethods = sortrows(bestSensorMethods,[4,5]);
+    bestSensorMethods = sortrows(bestSensorMethods,[5,4]);
 
     % Find the two lowest sensors
     bestAxis =grpstats(exercise_data,["Sensor","Axis"],{'mean','std'},'DataVars',["findpeaks","findpeaks_above_zero","double_findpeaks","zero_cross"]);

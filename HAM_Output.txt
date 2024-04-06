@@ -1,6 +1,6 @@
 Summary of Activity: 
-Filename: Processed Data/Test Data/PROCESSED_S22_Gaurav_BenchPress_11Reps-undefined-undefined-2024-03-26_20-46-30.mat
-Predicted Exercise: BenchPress
-Confidence: 100
-Number of Steps/Reps Detected: 20.2
-Estimated Calories Burned: 248.1
+Filename: Processed Data/Test Data/PROCESSED_S22_Zian_Situps_OO_12Reps_V-undefined-undefined-2024-03-20_11-12-47.mat
+Predicted Exercise: Situps
+Confidence: 76.72
+Number of Steps/Reps Detected: 10.5
+Estimated Calories Burned: 46.3
