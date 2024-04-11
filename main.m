@@ -1,11 +1,29 @@
 clear all; clc;
+% adding all subfolders to our path so we can load files easier
+folder = fileparts(which(mfilename)); 
+addpath(genpath(folder));
 %% Set parameters
 %Set window for number of sequences
 buffer_size=50*3;%50Hz Updates, 1.5 second buffer
-% buffer_size=999999;%Full dataset
+buffer_size=999999;%Full dataset(no buffer)
 rolling_buffer=0;
 
+NN_type="FF";
+
+user_weight=98;%kg
+user_height=196;%cm
+% user_weight=70;%kg
+% user_height=172;%cm
 %% Load Data
+%Load Neural Network Data
+NNs.versions=[
+    % load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\PatternNet\PatternNet_version0_1.mat");
+    % load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\PatternNet\PatternNet_version0_2_20Hidden.mat");
+    % load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\PatternNet\PatternNet_version0_8_10Hidden_AllSensors.mat");
+    load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\PatternNet\PatternNet_version0_9_14Hidden_AllSensors.mat");
+    % load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\LSTM\LSTM_v0_1_allsensors.mat");
+    ];
+
 testdata.classes=["Static";
     "Walking";
     "Jogging";
@@ -17,12 +35,12 @@ testdata.classes=["Static";
     ];
 %Load data being tested
 testdata.list=[
-"Processed Data/Test Data/PROCESSED_S22_Gaurav_BenchPress_11Reps-undefined-undefined-2024-03-26_20-46-30.mat"
-"Processed Data/Test Data/PROCESSED_S22_Muaz_BenchPress_10Reps_V-undefined-undefined-2024-03-21_20-06-26.mat"
-"Processed Data/Test Data/PROCESSED_S22_Muaz_PullupsUnA_9Reps_V-undefined-undefined-2024-03-21_19-55-13.mat"
-"Processed Data/Test Data/PROCESSED_S22_Muaz_Pullups_15Reps_V-undefined-undefined-2024-03-21_19-59-43.mat"
-"Processed Data/Test Data/PROCESSED_S22_Muaz_Situps_10Reps_V-undefined-undefined-2024-03-21_20-10-57.mat"
-"Processed Data/Test Data/PROCESSED_S22_Muaz_Walking_15Steps-undefined-undefined-2024-03-21_20-15-54.mat"
+% "Processed Data/Test Data/PROCESSED_S22_Gaurav_BenchPress_11Reps-undefined-undefined-2024-03-26_20-46-30.mat"
+% "Processed Data/Test Data/PROCESSED_S22_Muaz_BenchPress_10Reps_V-undefined-undefined-2024-03-21_20-06-26.mat"
+% "Processed Data/Test Data/PROCESSED_S22_Muaz_PullupsUnA_9Reps_V-undefined-undefined-2024-03-21_19-55-13.mat"
+% "Processed Data/Test Data/PROCESSED_S22_Muaz_Pullups_15Reps_V-undefined-undefined-2024-03-21_19-59-43.mat"
+% "Processed Data/Test Data/PROCESSED_S22_Muaz_Situps_10Reps_V-undefined-undefined-2024-03-21_20-10-57.mat"
+% "Processed Data/Test Data/PROCESSED_S22_Muaz_Walking_15Steps-undefined-undefined-2024-03-21_20-15-54.mat"
 "Processed Data/Test Data/PROCESSED_S22_Raya_BarbellSquats_OO_10Reps-undefined-undefined-2024-03-19_17-41-14.mat"
 "Processed Data/Test Data/PROCESSED_S22_Raya_BenchPress_OO_10Reps_V-undefined-undefined-2024-03-19_17-13-05.mat"
 "Processed Data/Test Data/PROCESSED_S22_Raya_Jogging_OO_300Steps-undefined-undefined-2024-03-19_16-49-43.mat"
@@ -40,22 +58,30 @@ testdata.list=[
 "Processed Data/Test Data/PROCESSED_S22_Zian_Pullups_15Reps_V-undefined-undefined-2024-03-21_20-02-05.mat"
 "Processed Data/Test Data/PROCESSED_S22_Zian_Situps_OO_12Reps_V-undefined-undefined-2024-03-20_11-12-47.mat"
     ];
+testdata_orig=testdata;
 
-%Load Neural Network Data
-NNs.versions=[
-    % load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\PatternNet\PatternNet_version0_1.mat");
-    load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\PatternNet\PatternNet_version0_2_20Hidden.mat");
-    ];
 
 clearvars call_gyro_x_data call_gyro_y_data plotting t x;
+%% Open output file
+fid=fopen("HAM_Output.txt",'w');
 
+%% Loop through each dataset
+for datafile_ind=1:length(testdata_orig.list)
+    testdata=testdata_orig;
+    testdata.list=testdata_orig.list(datafile_ind);
 %% Get sensor data in format for NN
-Xtest=gather_data_NNFormat(testdata,0);
+switch NN_type
+    case "LSTM"
+    Xtest=gather_data_NNFormat_LSTM(testdata,0,diag(NNs.versions.sensor_select));
+    otherwise
+    Xtest=gather_data_NNFormat(testdata,0,diag(NNs.versions.sensor_select));
+end
 %% Select and Run Neural Network Classification
 selected_NN=NNs.versions(1).net; %choose NN
 
 NNvals_epoch=[];
-
+Rep_count=[];
+exercise_classes=[];
 if rolling_buffer
     buffer_starts=1:(length(Xtest(1,:))-buffer_size);
     buffer_ends=buffer_starts+buffer_size;
@@ -71,8 +97,12 @@ end
 
 for i=1:length(buffer_starts)
     Xtest_buffer=Xtest(:,buffer_starts(i):buffer_ends(i));
+    if NN_type=="LSTM"
+    y=minibatchpredict(selected_NN,Xtest);
+    else
     y=selected_NN(Xtest_buffer);
-
+    end
+    y(:,isnan(y(1,:)))=0;
     %Determine classification
     for j=1:length(y(:,1))
         if j==1
@@ -82,17 +112,81 @@ for i=1:length(buffer_starts)
         end
     end
     NNvals_epoch(:,end)=NNvals_epoch(:,end)./sum(NNvals_epoch(:,end))*100;
-    
+    [current_best_class_confidence,current_best_class]=max(NNvals_epoch(:,end));
+    exercise_classes=[exercise_classes;
+        testdata.classes(current_best_class),num2str(current_best_class_confidence,4)];
     
 end
-
-
 %% Zero-Crossing
+% TBC: Add windowing for repcount and place in above for looop
+Rep_count(end+1)=RepCounter(load(testdata.list(1)),(exercise_classes(1,1))); %TBC: find better way to get most likely class
+[calories_burned,distance]=calc_calories((exercise_classes(1,1)),Rep_count,user_weight,user_height);
 
 
 
 
 %% Final outputs
+fprintf(fid,"----------------------------------------\n");
+fprintf(fid,"Summary of Activity: \n");
+fprintf(fid,"Filename: %s\n",testdata.list(1));%Should be in for loop after windowing
+fprintf(fid,"Predicted Exercise: %s\nConfidence: %s\n",exercise_classes(1,1),exercise_classes(1,2));
+fprintf(fid,"Number of Steps/Reps Detected: %.1f\n",Rep_count);
+fprintf(fid,"Estimated Calories Burned: %.1f\n",calories_burned);
+fprintf(fid,"----------------------------------------\n");
 
-
+fprintf("Summary of Activity: \n");
+fprintf("Filename: %s\n",testdata.list(1));%Should be in for loop after windowing
+fprintf("Predicted Exercise: %s\nConfidence: %s\n",exercise_classes(1,1),exercise_classes(1,2));
+fprintf("Number of Steps/Reps Detected: %.1f\n",Rep_count);
+fprintf("Estimated Calories Burned: %.1f\n",calories_burned);
+fprintf("Estimated Distance Traveled: %.1f\n",distance);
+end
+fclose(fid);
 disp("Done!")
+
+
+
+%% Functions
+function [calories_burned,dist_traveled]=calc_calories(exercise,reps_or_steps,weight,height)
+    switch exercise
+        case "Walking"
+            % calories_burned=reps_or_steps*height*0.415*weight*0.57*2.2/160934.4;
+            % dist_traveled=reps_or_steps*height*0.415/100000;
+            % calories_burned=weight*reps_or_steps*0.035;
+            stridelength=(1.35+1.14)/2*height;%average in cm
+            dist_traveled=stridelength*reps_or_steps/100;
+            % dist_traveled=reps_or_steps*0.415*height/100;
+            calories_burned=0.5*weight*dist_traveled/1000;
+        case "Jogging"
+            %Assume Light Jog, MET= 6
+            % calories_permin=6*3.5*weight/200;
+            % calories_burned=calories_permin/150*reps_or_steps;%average step/min=150 for jogging
+            % calories_burned=weight*reps_or_steps*0.045;
+            %average walking=5km/h, average jogging=8km/h
+            % stridelength=1.14*height;%female
+            % stridelength=1.35*height;%male
+            stridelength=(1.35+1.14)/2*height;%average in cm
+            dist_traveled=stridelength*reps_or_steps/100*1.1;
+            calories_burned=0.75*weight*dist_traveled/1000;
+            % dist_traveled=reps_or_steps*0.45*height/100;
+        case "BarbellSquat"
+            calories_burned=weight*reps_or_steps*0.125;
+            dist_traveled=0;
+        case "Deadlift"
+            calories_burned=weight*reps_or_steps*0.175;
+            dist_traveled=0;
+        case "Pullups"
+            calories_burned=weight*reps_or_steps*0.08;
+            dist_traveled=0;
+        case "BenchPress"
+            calories_burned=weight*reps_or_steps*0.125;
+            dist_traveled=0;
+        case "Situps"
+            calories_burned=weight*reps_or_steps*0.045;
+            dist_traveled=0;
+        otherwise
+            calories_burned=0;
+    end
+end
+
+
