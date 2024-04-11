@@ -7,11 +7,23 @@ addpath(genpath(folder));
 buffer_size=50*3;%50Hz Updates, 1.5 second buffer
 buffer_size=999999;%Full dataset(no buffer)
 rolling_buffer=0;
+
+NN_type="FF";
+
 user_weight=98;%kg
 user_height=196;%cm
 % user_weight=70;%kg
 % user_height=172;%cm
 %% Load Data
+%Load Neural Network Data
+NNs.versions=[
+    % load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\PatternNet\PatternNet_version0_1.mat");
+    % load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\PatternNet\PatternNet_version0_2_20Hidden.mat");
+    % load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\PatternNet\PatternNet_version0_8_10Hidden_AllSensors.mat");
+    load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\PatternNet\PatternNet_version0_9_14Hidden_AllSensors.mat");
+    % load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\LSTM\LSTM_v0_1_allsensors.mat");
+    ];
+
 testdata.classes=["Static";
     "Walking";
     "Jogging";
@@ -29,35 +41,41 @@ testdata.list=[
 % "Processed Data/Test Data/PROCESSED_S22_Muaz_Pullups_15Reps_V-undefined-undefined-2024-03-21_19-59-43.mat"
 % "Processed Data/Test Data/PROCESSED_S22_Muaz_Situps_10Reps_V-undefined-undefined-2024-03-21_20-10-57.mat"
 % "Processed Data/Test Data/PROCESSED_S22_Muaz_Walking_15Steps-undefined-undefined-2024-03-21_20-15-54.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Raya_BarbellSquats_OO_10Reps-undefined-undefined-2024-03-19_17-41-14.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Raya_BenchPress_OO_10Reps_V-undefined-undefined-2024-03-19_17-13-05.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Raya_Jogging_OO_300Steps-undefined-undefined-2024-03-19_16-49-43.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Raya_Pullups_OO_7Reps-undefined-undefined-2024-03-19_17-32-35.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Raya_Walking_OO_300Steps-undefined-undefined-2024-03-19_16-39-27.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Selena_BarbellSquats_10Reps-undefined-undefined-2024-03-27_8-47-49.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Selena_BenchPress_OO_8Reps-undefined-undefined-2024-03-20_11-25-08.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Selena_Jogging_OO_200Steps-undefined-undefined-2024-03-20_10-43-03.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Selena_Pullups_10Reps-undefined-undefined-2024-03-27_9-06-33.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Zian_BarbellSquat_OO_10Reps_V-undefined-undefined-2024-03-20_12-01-30.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Zian_BarbellSquats_8Reps_plate25-undefined-undefined-2024-03-27_8-35-31.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Zian_BenchPress_6Reps-undefined-undefined-2024-03-25_21-11-48.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Zian_Deadlift_OO_10Reps-undefined-undefined-2024-03-20_11-42-53.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Zian_Jogging_OO_40Steps-undefined-undefined-2024-03-20_10-48-02.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Zian_Pullups_15Reps_V-undefined-undefined-2024-03-21_20-02-05.mat"
-% "Processed Data/Test Data/PROCESSED_S22_Zian_Situps_OO_12Reps_V-undefined-undefined-2024-03-20_11-12-47.mat"
+"Processed Data/Test Data/PROCESSED_S22_Raya_BarbellSquats_OO_10Reps-undefined-undefined-2024-03-19_17-41-14.mat"
+"Processed Data/Test Data/PROCESSED_S22_Raya_BenchPress_OO_10Reps_V-undefined-undefined-2024-03-19_17-13-05.mat"
+"Processed Data/Test Data/PROCESSED_S22_Raya_Jogging_OO_300Steps-undefined-undefined-2024-03-19_16-49-43.mat"
+"Processed Data/Test Data/PROCESSED_S22_Raya_Pullups_OO_7Reps-undefined-undefined-2024-03-19_17-32-35.mat"
+"Processed Data/Test Data/PROCESSED_S22_Raya_Walking_OO_300Steps-undefined-undefined-2024-03-19_16-39-27.mat"
+"Processed Data/Test Data/PROCESSED_S22_Selena_BarbellSquats_10Reps-undefined-undefined-2024-03-27_8-47-49.mat"
+"Processed Data/Test Data/PROCESSED_S22_Selena_BenchPress_OO_8Reps-undefined-undefined-2024-03-20_11-25-08.mat"
+"Processed Data/Test Data/PROCESSED_S22_Selena_Jogging_OO_200Steps-undefined-undefined-2024-03-20_10-43-03.mat"
+"Processed Data/Test Data/PROCESSED_S22_Selena_Pullups_10Reps-undefined-undefined-2024-03-27_9-06-33.mat"
+"Processed Data/Test Data/PROCESSED_S22_Zian_BarbellSquat_OO_10Reps_V-undefined-undefined-2024-03-20_12-01-30.mat"
+"Processed Data/Test Data/PROCESSED_S22_Zian_BarbellSquats_8Reps_plate25-undefined-undefined-2024-03-27_8-35-31.mat"
+"Processed Data/Test Data/PROCESSED_S22_Zian_BenchPress_6Reps-undefined-undefined-2024-03-25_21-11-48.mat"
+"Processed Data/Test Data/PROCESSED_S22_Zian_Deadlift_OO_10Reps-undefined-undefined-2024-03-20_11-42-53.mat"
+"Processed Data/Test Data/PROCESSED_S22_Zian_Jogging_OO_40Steps-undefined-undefined-2024-03-20_10-48-02.mat"
+"Processed Data/Test Data/PROCESSED_S22_Zian_Pullups_15Reps_V-undefined-undefined-2024-03-21_20-02-05.mat"
+"Processed Data/Test Data/PROCESSED_S22_Zian_Situps_OO_12Reps_V-undefined-undefined-2024-03-20_11-12-47.mat"
     ];
+testdata_orig=testdata;
 
-%Load Neural Network Data
-NNs.versions=[
-    % load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\PatternNet\PatternNet_version0_1.mat");
-    % load("C:\Users\zianz\Repos\ENGO500_2023-24\NN Directory\PatternNet\PatternNet_version0_2_20Hidden.mat");
-    load("NN Directory/PatternNet/PatternNet_version0_6_20Hidden_wbar.mat");
-    ];
 
 clearvars call_gyro_x_data call_gyro_y_data plotting t x;
+%% Open output file
+fid=fopen("HAM_Output.txt",'w');
 
+%% Loop through each dataset
+for datafile_ind=1:length(testdata_orig.list)
+    testdata=testdata_orig;
+    testdata.list=testdata_orig.list(datafile_ind);
 %% Get sensor data in format for NN
-Xtest=gather_data_NNFormat(testdata,0);
+switch NN_type
+    case "LSTM"
+    Xtest=gather_data_NNFormat_LSTM(testdata,0,diag(NNs.versions.sensor_select));
+    otherwise
+    Xtest=gather_data_NNFormat(testdata,0,diag(NNs.versions.sensor_select));
+end
 %% Select and Run Neural Network Classification
 selected_NN=NNs.versions(1).net; %choose NN
 
@@ -79,8 +97,12 @@ end
 
 for i=1:length(buffer_starts)
     Xtest_buffer=Xtest(:,buffer_starts(i):buffer_ends(i));
+    if NN_type=="LSTM"
+    y=minibatchpredict(selected_NN,Xtest);
+    else
     y=selected_NN(Xtest_buffer);
-
+    end
+    y(:,isnan(y(1,:)))=0;
     %Determine classification
     for j=1:length(y(:,1))
         if j==1
@@ -104,19 +126,22 @@ Rep_count(end+1)=RepCounter(load(testdata.list(1)),(exercise_classes(1,1))); %TB
 
 
 %% Final outputs
-fid=fopen("HAM_Output.txt",'w');
+fprintf(fid,"----------------------------------------\n");
 fprintf(fid,"Summary of Activity: \n");
 fprintf(fid,"Filename: %s\n",testdata.list(1));%Should be in for loop after windowing
 fprintf(fid,"Predicted Exercise: %s\nConfidence: %s\n",exercise_classes(1,1),exercise_classes(1,2));
 fprintf(fid,"Number of Steps/Reps Detected: %.1f\n",Rep_count);
 fprintf(fid,"Estimated Calories Burned: %.1f\n",calories_burned);
+fprintf(fid,"----------------------------------------\n");
+
 fprintf("Summary of Activity: \n");
 fprintf("Filename: %s\n",testdata.list(1));%Should be in for loop after windowing
 fprintf("Predicted Exercise: %s\nConfidence: %s\n",exercise_classes(1,1),exercise_classes(1,2));
 fprintf("Number of Steps/Reps Detected: %.1f\n",Rep_count);
 fprintf("Estimated Calories Burned: %.1f\n",calories_burned);
 fprintf("Estimated Distance Traveled: %.1f\n",distance);
-fclose(fid)
+end
+fclose(fid);
 disp("Done!")
 
 
@@ -128,7 +153,7 @@ function [calories_burned,dist_traveled]=calc_calories(exercise,reps_or_steps,we
             % calories_burned=reps_or_steps*height*0.415*weight*0.57*2.2/160934.4;
             % dist_traveled=reps_or_steps*height*0.415/100000;
             % calories_burned=weight*reps_or_steps*0.035;
-            stridelength=1.35*1.14/2*height;%average in cm
+            stridelength=(1.35+1.14)/2*height;%average in cm
             dist_traveled=stridelength*reps_or_steps/100;
             % dist_traveled=reps_or_steps*0.415*height/100;
             calories_burned=0.5*weight*dist_traveled/1000;
@@ -140,7 +165,7 @@ function [calories_burned,dist_traveled]=calc_calories(exercise,reps_or_steps,we
             %average walking=5km/h, average jogging=8km/h
             % stridelength=1.14*height;%female
             % stridelength=1.35*height;%male
-            stridelength=1.35*1.14/2*height;%average in cm
+            stridelength=(1.35+1.14)/2*height;%average in cm
             dist_traveled=stridelength*reps_or_steps/100*1.1;
             calories_burned=0.75*weight*dist_traveled/1000;
             % dist_traveled=reps_or_steps*0.45*height/100;
@@ -163,3 +188,5 @@ function [calories_burned,dist_traveled]=calc_calories(exercise,reps_or_steps,we
             calories_burned=0;
     end
 end
+
+

@@ -1,0 +1,40 @@
+----------------------------------------
+Summary of Activity: 
+Filename: Processed Data/Test Data/PROCESSED_S22_Muaz_BenchPress_10Reps_V-undefined-undefined-2024-03-21_20-06-26.mat
+Predicted Exercise: BenchPress
+Confidence: 98.16
+Number of Steps/Reps Detected: 9.8
+Estimated Calories Burned: 119.4
+----------------------------------------
+----------------------------------------
+Summary of Activity: 
+Filename: Processed Data/Test Data/PROCESSED_S22_Muaz_PullupsUnA_9Reps_V-undefined-undefined-2024-03-21_19-55-13.mat
+Predicted Exercise: Pullups
+Confidence: 100
+Number of Steps/Reps Detected: 8.8
+Estimated Calories Burned: 68.6
+----------------------------------------
+----------------------------------------
+Summary of Activity: 
+Filename: Processed Data/Test Data/PROCESSED_S22_Muaz_Pullups_15Reps_V-undefined-undefined-2024-03-21_19-59-43.mat
+Predicted Exercise: Pullups
+Confidence: 100
+Number of Steps/Reps Detected: 15.2
+Estimated Calories Burned: 119.6
+----------------------------------------
+----------------------------------------
+Summary of Activity: 
+Filename: Processed Data/Test Data/PROCESSED_S22_Muaz_Situps_10Reps_V-undefined-undefined-2024-03-21_20-10-57.mat
+Predicted Exercise: Pullups
+Confidence: 81.7
+Number of Steps/Reps Detected: 10.2
+Estimated Calories Burned: 80.4
+----------------------------------------
+----------------------------------------
+Summary of Activity: 
+Filename: Processed Data/Test Data/PROCESSED_S22_Muaz_Walking_15Steps-undefined-undefined-2024-03-21_20-15-54.mat
+Predicted Exercise: Jogging
+Confidence: 99.89
+Number of Steps/Reps Detected: 9.0
+Estimated Calories Burned: 1.8
+----------------------------------------

@@ -21,8 +21,8 @@ function [x,t]=gather_data_NNFormat(datasets,trainmode,sensor_toggle)
         Acci=sensor_toggle(1:3,1:3)*datai.accel_data(:,[5,4,3])';
         Gravi=sensor_toggle(4:6,4:6)*datai.grav_data(:,[5,4,3])';
         Gyroi=sensor_toggle(7:9,7:9)*datai.gyro_data(:,[5,4,3])';
-        % Bari=sensor_toggle(10:11,10:11)*bar_data(:,[3,4])';% Disabled until interpolation function added
-        Bari=zeros(2,length(Gyroi(1,:)));
+        Bari=sensor_toggle(10:11,10:11)*datai.bar_data(:,[3,4])';% Disabled until interpolation function added
+        % Bari=zeros(2,length(Gyroi(1,:)));
         Orienti=sensor_toggle(12:18,12:18)*datai.orient_data(:,[7,8,9,6,5,4,3])';
         % Determine numerical class value for file using its name
         if trainmode
